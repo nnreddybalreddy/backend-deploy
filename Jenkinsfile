@@ -10,15 +10,10 @@ pipeline {
     parameters {
         string(name: 'appVersion', defaultValue: '1.0.0', description: 'What is the application version?')
     }
-  
     environment{
-        defappVersion =''
-        nexusUrl ='nexus.narendra.shop:8081'
-        region ="us-east-1"
-        account_id ="905418111046"
-
-    }    
-
+        def appVersion = '' //variable declaration
+        nexusUrl = 'nexus.daws78s.online:8081'
+    }
     stages {
         stage('print the version'){
             steps{
@@ -27,9 +22,33 @@ pipeline {
                 }
             }
         }
+        stage('Init'){
+            steps{
+                sh """
+                    cd terraform
+                    terraform init
+                """
+            }
+        }
+        stage('Plan'){
+            steps{
+                sh """
+                    pwd
+                    cd terraform
+                    terraform plan -var="app_version=${params.appVersion}"
+                """
+            }
+        }
 
+        // stage('Deploy'){
+        //     steps{
+        //         sh """
+        //             cd terraform
+        //             terraform apply -auto-approve -var="app_version=${params.appVersion}"
+        //         """
+        //     }
+        // }
     }
-
     post { 
         always { 
             echo 'I will always say Hello again!'
@@ -43,4 +62,3 @@ pipeline {
         }
     }
 }
-
