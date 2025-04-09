@@ -21,3 +21,7 @@ variable"common_tags"{
 variable"zone_name"{
   default="narendra.shop"
 }
+
+variable "app_version" {
+  
+}
